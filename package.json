@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "workspaces": ["frontend"],
+  "scripts": {
+    "typecheck": "yarn workspace jpi-frontend run typecheck",
+    "dev": "yarn workspace jpi-frontend run dev"
+  }
+}

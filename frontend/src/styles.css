@@ -1,0 +1,3 @@
+/* minimal global styles for scaffold */
+html,body,#root { height: 100%; }
+body { background: #f5f7fa; }
