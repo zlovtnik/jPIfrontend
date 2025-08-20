@@ -8,7 +8,7 @@ export type EffectState<T> =
   | { status: 'success'; data: T }
   | { status: 'error'; error: unknown }
 
-export function useEffectIO<R>(effFactory: () => Effect.Effect<never, unknown, R>, deps: any[] = []) {
+export function useEffectIO<R>(effFactory: () => Effect.Effect<any, unknown, R>, deps: any[] = []) {
   const { run } = useEffectContext()
   const mounted = useRef(true)
   const [state, setState] = useState<EffectState<R>>({ status: 'idle' })
@@ -21,7 +21,7 @@ export function useEffectIO<R>(effFactory: () => Effect.Effect<never, unknown, R
     ;(async () => {
       try {
         const eff = effFactory()
-        const res = await run(eff)
+  const res = (await run(eff as any)) as R
         if (!cancelled && mounted.current) setState({ status: 'success', data: res })
       } catch (e) {
         if (!cancelled && mounted.current) setState({ status: 'error', error: e })

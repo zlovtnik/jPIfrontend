@@ -12,7 +12,18 @@ export const EffectProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { token } = useAuth()
 
   const run: RunFn = async (eff) => {
-    // Set axios default Authorization header for the duration of the effect
+    // Prefer to provide the AuthService into the effect environment if available
+    const authValue = { token }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const provideService = (Effect as any).provideService as ((tag: any, v: any) => any) | undefined
+    if (provideService) {
+      // Use provideService to inject the AuthService into the effect's environment
+      const mod = await import('../services/auth.effect')
+      const provided = provideService(mod.AuthService, authValue)
+      return runEffect(provided(eff))
+    }
+
+    // Fallback: set axios default Authorization header for the duration of the effect
     const prev = axios.defaults.headers.common.Authorization
     try {
       if (token) axios.defaults.headers.common.Authorization = `Bearer ${token}`

@@ -13,6 +13,16 @@ export function request<T>(path: string, config?: AxiosRequestConfig): Effect.Ef
   return Effect.tryPromise(() => axios({ url, ...config }).then((r) => r.data as T))
 }
 
+// Authenticated request: types show this Effect requires the AuthService in its environment.
+export function requestAuth<T>(path: string, config?: AxiosRequestConfig): Effect.Effect<
+  typeof import('./auth.effect').AuthService,
+  unknown,
+  T
+> {
+  const url = buildUrl(path)
+  return Effect.tryPromise(() => axios({ url, ...config }).then((r) => r.data as T))
+}
+
 // small helper to run an Effect at React boundary
 export async function runEffectToPromise<R>(eff: Effect.Effect<never, unknown, R>): Promise<R> {
   // use runPromise if available on Effect
