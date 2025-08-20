@@ -1,10 +1,13 @@
 import React from 'react'
+import usePageMeta from '../lib/usePageMeta'
 import { Donation } from '../types/donation'
 import { listDonations } from '../services/donations.effect'
 import { useEffectIO } from '../hooks/useEffectIO'
 
 export default function DonationsList() {
   const state = useEffectIO<Donation[]>(() => listDonations(), [])
+
+  usePageMeta({ title: 'Donations — JPI', description: "See recent donations and support JPI's initiatives.", ogTitle: 'Donations — JPI', ogDescription: "See recent donations and support JPI's initiatives." })
 
   return (
     <section className="section">

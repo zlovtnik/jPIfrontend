@@ -1,13 +1,15 @@
 import React from 'react'
+import usePageMeta from '../lib/usePageMeta'
 import { Member } from '../types/member'
 import { listMembers } from '../services/members.effect'
 import { useEffectIO } from '../hooks/useEffectIO'
 
 export default function MembersList() {
   const state = useEffectIO<Member[]>(() => listMembers(), [])
+  usePageMeta({ title: 'Members — JPI', description: 'Browse members of the JPI community.', ogTitle: 'Members — JPI', ogDescription: 'Browse members of the JPI community.' })
 
   return (
-    <section className="section">
+  <section className="section">
       <div className="container">
         <h1 className="title">Members</h1>
         {state.status === 'error' && <div className="notification is-danger">{String(state.error)}</div>}
